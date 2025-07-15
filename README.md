@@ -1,37 +1,72 @@
-# Electronix AI - Sentiment Analysis Service
+# Electronix AI – Sentiment Analysis Microservice
 
-This is an end-to-end microservice for binary sentiment analysis.
+This project is a complete, containerized microservice for binary sentiment classification (`positive` / `negative`) using Hugging Face Transformers. It includes a FastAPI backend, a React frontend, and a CLI fine-tuning script. Built as part of the Electronix AI Fullstack Intern Assignment.
 
-## Setup & Run
+---
 
-1.  **(Optional) Fine-Tune Model**: To update the model with your own data, place it in `data/data.jsonl` and run:
-    ```bash
-    pip install -r backend/requirements.txt
-    python finetune.py --data data/data.jsonl
-    ```
-2.  **Build and Start Services**:
-    ```bash
-    docker-compose up --build
-    ```
-3.  **Access**:
-    -   **Frontend**: `http://localhost:3000`
-    -   **API Docs**: `http://localhost:8000/docs`
+## 🚀 Quick Start
 
-## Design Decisions
+### Prerequisites
+- Docker & Docker Compose installed
 
--   **Backend**: FastAPI was chosen for its performance and auto-generated API docs.
--   **Frontend**: React was used for its component-based architecture.
--   **Model**: The default model is `distilbert-base-uncased-finetuned-sst-2-english`, offering a great balance of speed and accuracy.
--   **Containerization**: Docker Compose enables a consistent, single-command setup on any CPU-only machine.
+### Run the App
+```bash
+docker-compose up --build
+```
 
-## API Documentation
+- Frontend: http://localhost:3000  
+- API: http://localhost:8000/predict
 
-### POST /predict
+### Sample API Usage
+```bash
+curl -X POST http://localhost:8000/predict   -H "Content-Type: application/json"   -d '{"text": "Great product!"}'
+```
 
-Analyzes the sentiment of a given text string.
-
-**Request Body:**
+Response:
 ```json
-{
-  "text": "This is a wonderful experience!"
-}
+{ "label": "positive", "score": 0.98 }
+```
+
+---
+
+## 🛠 Fine-Tuning Script
+
+Train the model on custom data and save weights:
+
+```bash
+python finetune.py -data data.jsonl -epochs 3 -lr 3e-5
+```
+
+**Sample data.jsonl:**
+```json
+{"text": "Loved it!", "label": "positive"}
+{"text": "Not good.", "label": "negative"}
+```
+
+- Saves fine-tuned model to `./model/`
+- Automatically reloaded by API on next run
+
+---
+
+## 🧰 Tech Stack
+
+- **Backend:** Python, FastAPI, Hugging Face Transformers  
+- **Frontend:** React  
+- **Model:** `cardiffnlp/twitter-roberta-base-sentiment-latest`  
+- **Infra:** Docker, Docker Compose
+
+---
+
+## 📁 Project Structure
+
+- `app/` – FastAPI backend  
+- `frontend/` – React frontend  
+- `finetune.py` – Training CLI  
+- `docker-compose.yml`, `Dockerfile`, `requirements.txt`
+
+---
+
+
+---
+
+> ✅ Built with ❤️ for the Electronix AI Fullstack Intern Assignment
